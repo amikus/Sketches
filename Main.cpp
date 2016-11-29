@@ -38,10 +38,10 @@ void drawStage() {
 
 	GLfloat x, y;
 
-	GLfloat mat_ambient[] = { .8, .8, 0, 1 };
-	GLfloat mat_diffuse[] = { .2, .2, 0, 1 };
-	GLfloat mat_specular[] = { 1, 1, 0, 1 };
-	GLfloat mat_shininess = { .5 };
+	GLfloat mat_ambient[] = { 0.0f, 0.0f, 0.0f, 1 };
+	GLfloat mat_diffuse[] = { 1.0f, 1.0f, 1.0f, 1 };
+	GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 1 };
+	GLfloat mat_shininess = {100.0f };
 
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
@@ -51,10 +51,10 @@ void drawStage() {
 	for (x = -8.0f; x < 8.0f; x = x + 0.1) {
 		for (y = -7.5f; y < 8.0f; y = y + 0.1) {
 			glBegin(GL_POLYGON);
-			glVertex3f(x, y, 9);
-			glVertex3f(x + 0.1, y, 9);
-			glVertex3f(x + 0.1, y + 0.1, 9);
-			glVertex3f(x, y + 0.1, 9);
+				glVertex3f(x, y, 0);
+				glVertex3f(x + 0.1, y, 0);
+				glVertex3f(x + 0.1, y + 0.1, 0);
+				glVertex3f(x, y + 0.1, 0);
 			glEnd();
 		}
 	}
@@ -64,12 +64,15 @@ void drawStage() {
 // display callback
 void display(void)
 {
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// clear color and depth buffers
 
-	GLfloat light_ambient[] = { .5, .5, .5, 1 };
-	GLfloat light_diffuse[] = { .5, .5, .5, 1 };
-	GLfloat light_specular[] = { .5, .5, .5, 1 };
-	GLfloat light_position[] = { -5, -5, -5, 0 };
+	GLfloat light_ambient[] = { 0.4f, 0.4f, 0.4f, 1 };
+	GLfloat light_diffuse[] = { 0.6f, 0.6f, 0.6f, 1 };
+	GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1 };
+	GLfloat light_position[] = { 1, 1, 3, 0 };
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
@@ -78,10 +81,7 @@ void display(void)
 
 	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 1.0);
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	glNormal3f(0.0f, 0.0f, -1.0f);
+	glNormal3f(0, 0, 1);
 	drawStage();
 
 	glutSwapBuffers();
