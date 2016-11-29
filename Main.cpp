@@ -8,9 +8,22 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 
+using namespace std;
+
 // init callback
 void myInit(void)
 {
+	// set up lighting
+	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHTING);
+	glShadeModel(GL_SMOOTH);
+	glEnable(GL_NORMALIZE);
+
+	// set up ability to track object depths
+	glEnable(GL_DEPTH_TEST);
+	glClearDepth(1.0f);
+	glDepthFunc(GL_LEQUAL);
+
 	glClearColor(0.0, 0.0, 0.0, 1.0);	// background color: black
 	glColor3f(1.0f, 1.0f, 1.0f);		// drawing color: white
 	glLineWidth(2.0);					// a line is 2 pixels wide
@@ -19,10 +32,32 @@ void myInit(void)
 	glLoadIdentity();										// lead identity matrix
 	glOrtho(-10.0f, 10.0f, -10.0f, 10.0f, -10.0f, 10.0f);	// orthographic mapping
 
-	// set up ability to track object depths
-	glClearDepth(1.0f);					// set clearing distance for depth buffer
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
+}
+
+void drawStage() {
+
+	GLfloat x, y;
+
+	GLfloat mat_ambient[] = { .8, .8, 0, 1 };
+	GLfloat mat_diffuse[] = { .2, .2, 0, 1 };
+	GLfloat mat_specular[] = { 1, 1, 0, 1 };
+	GLfloat mat_shininess = { .5 };
+
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+	glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess);
+
+	for (x = -8.0f; x < 8.0f; x = x + 0.1) {
+		for (y = -7.5f; y < 8.0f; y = y + 0.1) {
+			glBegin(GL_POLYGON);
+			glVertex3f(x, y, 9);
+			glVertex3f(x + 0.1, y, 9);
+			glVertex3f(x + 0.1, y + 0.1, 9);
+			glVertex3f(x, y + 0.1, 9);
+			glEnd();
+		}
+	}
 
 }
 
@@ -31,15 +66,27 @@ void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// clear color and depth buffers
 
-	glBegin(GL_QUADS);
-		glVertex3f(-8.0f, -7.5f, 0.0f);
-		glVertex3f(-8.0f, 8.0f, 0.0f);
-		glVertex3f(8.0f, 8.0f, 0.0f);
-		glVertex3f(8.0f, -7.5f, 0.0f);
-	glEnd();
+	GLfloat light_ambient[] = { .5, .5, .5, 1 };
+	GLfloat light_diffuse[] = { .5, .5, .5, 1 };
+	GLfloat light_specular[] = { .5, .5, .5, 1 };
+	GLfloat light_position[] = { -5, -5, -5, 0 };
+
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
+	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 1.0);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glNormal3f(0.0f, 0.0f, -1.0f);
+	drawStage();
 
 	glutSwapBuffers();
 }
+
 
 // reshape callback
 void reshape(int w, int h) {
