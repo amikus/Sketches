@@ -12,7 +12,7 @@
 void myInit(void)
 {
 	glClearColor(0.0, 0.0, 0.0, 1.0);	// background color: black
-	glColor3f(0.0f, 0.0f, 0.0f);		// drawing color: white
+	glColor3f(1.0f, 1.0f, 1.0f);		// drawing color: white
 	glLineWidth(2.0);					// a line is 2 pixels wide
 
 	glMatrixMode(GL_PROJECTION);							// set matrix mode
@@ -30,6 +30,13 @@ void myInit(void)
 void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// clear color and depth buffers
+
+	glBegin(GL_QUADS);
+		glVertex3f(-8.0f, -7.5f, 0.0f);
+		glVertex3f(-8.0f, 8.0f, 0.0f);
+		glVertex3f(8.0f, 8.0f, 0.0f);
+		glVertex3f(8.0f, -7.5f, 0.0f);
+	glEnd();
 
 	glutSwapBuffers();
 }
