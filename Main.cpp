@@ -48,7 +48,6 @@ void myInit(void)
 
 	glMatrixMode(GL_PROJECTION);							// set matrix mode
 	glLoadIdentity();										// lead identity matrix
-	glOrtho(-10.0f, 10.0f, -10.0f, 10.0f, -10.0f, 10.0f);	// orthographic mapping
 
 }
 
