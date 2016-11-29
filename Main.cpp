@@ -11,7 +11,11 @@
 using namespace std;
 
 GLuint WIN_WIDTH, WIN_HEIGHT;
-GLfloat eyeX = 0.0f, eyeY = 0.0f, eyeZ = 0.0f;
+GLfloat eyeX = 0.0f, eyeY = 0.0f, eyeZ = 0.0f;	// starting eye position
+GLfloat lightSourceX = -3.0f, lightSourceY = 10.0f, lightSourceZ = 5.0f; // location of light source
+GLfloat light_position[] = { lightSourceX,	lightSourceY,	lightSourceZ,	.5f }; // light 0 position
+
+GLUquadricObj*	sphereQuadric;
 
 // init callback
 void myInit(void)
@@ -20,15 +24,17 @@ void myInit(void)
 	WIN_WIDTH = glutGet(GLUT_SCREEN_WIDTH) / 2.0;
 	WIN_HEIGHT = glutGet(GLUT_SCREEN_HEIGHT) / 2.0;
 
-	// set up light
-	GLfloat light_ambient[] = { 0.4f, 0.4f, 0.4f, 1 };
+	//set up light
+	GLfloat light_ambient[] = { 0.6f, 0.6f, 0.6f, 1 };
 	GLfloat light_diffuse[] = { 0.6f, 0.6f, 0.6f, 1 };
 	GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1 };
-	GLfloat light_position[] = { 1, 1, 3, 0 };
+	//GLfloat light_position[] = { lightSourceX, lightSourceY, lightSourceZ, .5f };
+
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
 	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 2.0);
 
 	// enable light
@@ -36,6 +42,10 @@ void myInit(void)
 	glEnable(GL_LIGHTING);
 	glShadeModel(GL_SMOOTH);	// interpolate adjacent polygons shading
 	glEnable(GL_NORMALIZE);		// set normal vectors to unit length
+
+	sphereQuadric = gluNewQuadric();
+	gluQuadricDrawStyle(sphereQuadric, GLU_FILL);
+	glPolygonOffset(1.0, 1.0);	// offset to distinguish shadow from floor
 
 	// set up ability to track object depths
 	glEnable(GL_DEPTH_TEST);
@@ -58,9 +68,9 @@ void drawStage(int w, int h)
 	float dw = 1.0f / w;
 	float dh = 1.0f / h;
 
-	GLfloat mat_ambient[] = { 0.2f, 0.2f, 0.2f, 1 };
+	GLfloat mat_ambient[] = { 0.3f, 0.32f, 0.3f, 1 };
 	GLfloat mat_diffuse[] = { 1.0f, 1.0f, 1.0f, 1 };
-	GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 1 };
+	GLfloat mat_specular[] = { 0.7f, 0.7f, 0.7f, 1 };
 	GLfloat mat_shininess = { 100.0f };
 
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
@@ -69,7 +79,7 @@ void drawStage(int w, int h)
 	glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess);
 
 	glPushMatrix(); // floor
-		glTranslatef(0.0f, -10.0f, 0.0f);
+		glTranslatef(0.0f, -5.0f, 0.0f);
 		glRotatef(-90.0, 1.0, 0.0, 0.0); // Rotate from vertical
 		glScalef(50.0, 50.0, 50.0);
 		glEnable(GL_POLYGON_OFFSET_FILL);
@@ -87,9 +97,6 @@ void drawStage(int w, int h)
 
 void drawSphere()
 {
-	GLUquadricObj*	sphereQuadric;
-	sphereQuadric = gluNewQuadric();
-	gluQuadricDrawStyle(sphereQuadric, GLU_FILL);
 
 	GLfloat mat_ambient[] = { 0.3f, 0.0f, 0.0f, 1 };
 	GLfloat mat_diffuse[] = { 1.0f, 0.0f, 0.0f, 1 };
@@ -102,8 +109,36 @@ void drawSphere()
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess);
 
 	glPushMatrix(); // red sphere
-		glTranslatef(0, 2.0f, 0);
+		glTranslatef(0.0f, 4.0f, 0.0f);
 		gluSphere(sphereQuadric, 1, 25, 25);
+	glPopMatrix();
+}
+
+
+void drawShadow()
+{
+
+	GLfloat shadow[16] = { 1,0,0,0,	0,1,0,-1.0 / lightSourceY,	0,0,1,0,	0,0,0,0 };
+
+	GLfloat mat_ambient[] = { 0.5f, 0.5f, 0.5f, 1 };
+	GLfloat mat_diffuse[] = { 0.0f, 0.0f, 0.0f, 1 };
+	GLfloat mat_specular[] = { 0.0f, 0.0f, 0.0f, 1 };
+	GLfloat mat_shininess = { 75.0f };
+
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse);
+	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess);
+
+	glPushMatrix();
+	glTranslatef(0.0f, -5.0f, 0.0f);
+		glPushMatrix(); // spherical shadow
+			glTranslatef(lightSourceX, lightSourceY, lightSourceZ);
+			glMultMatrixf(shadow); // Apply shadow matrix
+			glTranslatef(-lightSourceX, -lightSourceY, -lightSourceZ);
+			glTranslatef(0, 5.0f, 0.0f);
+			gluSphere(sphereQuadric, 1, 30, 30);
+		glPushMatrix();
 	glPopMatrix();
 }
 
@@ -115,11 +150,13 @@ void display(void)
 	glLoadIdentity();
 
 	gluLookAt(eyeX, eyeY, eyeZ, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
 	glNormal3f(0, 0, 1);
 
 	drawStage(100, 100);
 	drawSphere();
+	drawShadow();
 
 	glutSwapBuffers();
 }
