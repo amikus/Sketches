@@ -10,9 +10,16 @@
 
 using namespace std;
 
+GLuint WIN_WIDTH, WIN_HEIGHT;
+GLfloat eyeX = 0.0f, eyeY = 0.0f, eyeZ = 0.0f;
+
 // init callback
 void myInit(void)
 {
+	// set window size
+	WIN_WIDTH = glutGet(GLUT_SCREEN_WIDTH) / 2.0;
+	WIN_HEIGHT = glutGet(GLUT_SCREEN_HEIGHT) / 2.0;
+
 	// set up light
 	GLfloat light_ambient[] = { 0.4f, 0.4f, 0.4f, 1 };
 	GLfloat light_diffuse[] = { 0.6f, 0.6f, 0.6f, 1 };
@@ -45,40 +52,12 @@ void myInit(void)
 
 }
 
-void drawStage()
-{
-
-	GLfloat x, y;
-
-	GLfloat mat_ambient[] = { 0.2f, 0.2f, 0.2f, 1 };
-	GLfloat mat_diffuse[] = { 1.0f, 1.0f, 1.0f, 1 };
-	GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 1 };
-	GLfloat mat_shininess = { 100.0f };
-
-	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-	glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess);
-
-	for (x = -8.0f; x < 8.0f; x = x + 0.1) {
-		for (y = -7.5f; y < 8.0f; y = y + 0.1) {
-			glBegin(GL_POLYGON);
-				glVertex3f(x, y, 0);
-				glVertex3f(x + 0.1, y, 0);
-				glVertex3f(x + 0.1, y + 0.1, 0);
-				glVertex3f(x, y + 0.1, 0);
-			glEnd();
-		}
-	}
-
-}
-
-void drawStage2(int w, int h)
+void drawStage(int w, int h)
 {
 	int i, j;
 
-	float dw = 1.0 / w;
-	float dh = 1.0 / h;
+	float dw = 1.0f / w;
+	float dh = 1.0f / h;
 
 	GLfloat mat_ambient[] = { 0.2f, 0.2f, 0.2f, 1 };
 	GLfloat mat_diffuse[] = { 1.0f, 1.0f, 1.0f, 1 };
@@ -91,14 +70,15 @@ void drawStage2(int w, int h)
 	glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess);
 
 	glPushMatrix(); // floor
+		glTranslatef(0.0f, -10.0f, 0.0f);
 		glRotatef(-90.0, 1.0, 0.0, 0.0); // Rotate from vertical
 		glScalef(50.0, 50.0, 50.0);
 		glEnable(GL_POLYGON_OFFSET_FILL);
-		for (j = 0; j < 100; ++j) {
+		for (j = 0; j < h; ++j) {
 			glBegin(GL_TRIANGLE_STRIP);
-			for (i = 0; i <= 100; ++i) {
-				glVertex2f(dw * i - 0.5, dh * (j + 1) - 0.5);
-				glVertex2f(dw * i - 0.5, dh * j - 0.5);
+			for (i = 0; i <= w; ++i) {
+				glVertex2f(dw * i - 0.5f, dh * (j + 1) - 0.5f);
+				glVertex2f(dw * i - 0.5f, dh * j - 0.5f);
 			}
 			glEnd();
 		}
@@ -123,55 +103,60 @@ void drawSphere()
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess);
 
 	glPushMatrix(); // red sphere
-		glTranslatef(0, 0, 0);
-		gluSphere(sphereQuadric, 2, 25, 25);
+		glTranslatef(0, 2.0f, 0);
+		gluSphere(sphereQuadric, 1, 25, 25);
 	glPopMatrix();
 }
 
 // display callback
 void display(void)
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// clear color and depth buffers
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// clear color and depth buffers
+	gluLookAt(eyeX, eyeY, eyeZ, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
 	glNormal3f(0, 0, 1);
 
-	drawStage();
-	drawStage2(100, 100);
+	drawStage(100, 100);
 	drawSphere();
 
 	glutSwapBuffers();
 }
 
-
-// reshape callback
-void reshape(int w, int h)
-{
-
-	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+void reshape(int w, int h) {
+	glViewport(0, 0, w, h);
+	WIN_WIDTH = w;
+	WIN_HEIGHT = h;
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
+	gluPerspective(
+		45.0f,
+		(GLfloat)(WIN_WIDTH) / (GLfloat)(WIN_HEIGHT),
+		0.1,
+		70.0);
+}
 
-	if (w <= h) {
-		glOrtho(-10.0f, 10.0f, -10.0f * (GLfloat)h / (GLfloat)w, 10.0f * (GLfloat)h / (GLfloat)w, -10.0f, 10.0f);
-	}
-	else {
-		glOrtho(-10.0f * (GLfloat)w / (GLfloat)h, 10.0f * (GLfloat)w / (GLfloat)h, -10.0f, 10.0f, -10.0f, 10.0f);
-	}
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
+void mouseMovement(int x, int y) {
+	// 3 * 360 degree possible
+		double deg1 = (360.0 / WIN_WIDTH)*(double)x*3.0;
+	// top and bottom views
+		double deg2 = (180.0 / WIN_HEIGHT)*(double)y;
+	double r = 30.0;
+	if (deg1 > 360)deg1 = fmod(deg1, 360.0);
+	eyeZ = r * sin(deg2*0.0174532) * cos(deg1*0.0174532);
+	eyeX = r * sin(deg2*0.0174532) * sin(deg1*0.0174532);
+	eyeY = r * cos(deg2*0.0174532);
+	glutPostRedisplay();
 }
 
 int main(int argc, char** argv)
 {
 	// basic glut setup
-	glutInit(&argc, argv);										// initialize toolkit
+	glutInit(&argc, argv);	// initialize toolkit
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);	// set display mode
-	glutInitWindowSize(700, 700);								// set window size
+	glutInitWindowSize(WIN_WIDTH, WIN_HEIGHT);					// set window size
 	glutInitWindowPosition(100, 100);							// set window position on screen
 	glutCreateWindow("Sketches");								// open screen window
 	
@@ -179,6 +164,7 @@ int main(int argc, char** argv)
 	myInit();						// additional inits
 	glutDisplayFunc(display);		// redraw to window
 	glutReshapeFunc(reshape);		// reshape window
+	glutPassiveMotionFunc(mouseMovement);
 
 	glutMainLoop();
 
