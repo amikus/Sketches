@@ -40,7 +40,7 @@ public:
 
 	void toggleDrawing(string);		// update pen position
 	void updatePosition();			// update walker's corner coordinates
-	void drawBall();				// draw ball and dot array
+	void draw();					// draw ball and dot array
 	void drawDot(float, float, float);		// add dot coordinate to dot array
 
 	Walker(int, int, int);			// Walker constructor

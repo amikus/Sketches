@@ -30,7 +30,7 @@ void Walker::updatePosition() {
 }
 
 // draw Walker and create dot array
-void Walker::drawBall() {
+void Walker::draw() {
 
 	// draw dot array
 	vector<Point>::const_iterator it;
@@ -41,8 +41,8 @@ void Walker::drawBall() {
 		glEnd();
 	}
 
-	// set color to green
-	glColor3f(0.0f, 1.0f, 0.0f);
+	// set pen color to red
+	glColor3f(1.0f, 0.0f, 0.0f);
 
 	// draw Ball
 
@@ -52,7 +52,7 @@ void Walker::drawBall() {
 }
 
 // add dot coordinate to dot array
-void Walker::drawDot(float xPosition, float yPosition, zPosition) {
+void Walker::drawDot(float xPosition, float yPosition, float zPosition) {
 	points.push_back(Point(xPosition, yPosition, zPosition));
 }
 
