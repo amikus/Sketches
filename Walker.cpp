@@ -1,19 +1,17 @@
 #include "Walker.h"
 
 // Walker constructor
-Walker::Walker(int xPosition, int yPosition, int zPosition) {
+Walker::Walker(int xPosition, int yPosition, int zPosition, float r, float g, float b) {
 
 	// set pen coordinates
 	this->xPosition = xPosition;
 	this->yPosition = yPosition;
 	this->zPosition = zPosition;
 
-	// set Walker's coordinates based
-	// on coordinates specified above
-	updatePosition();
+	this->red = r;
+	this->green = g;
+	this->blue = b;
 
-	// draw the ball
-	draw();
 };
 
 
@@ -25,15 +23,33 @@ Walker::~Walker() {
 // update Walker's coordinates based on xPosition, yPosition, and zPosition
 void Walker::updatePosition() {
 
-	// bottom left corner
-	// draw the ball here
+	GLfloat randX = (rand() % 3 - 1) / 10.0f;
+	GLfloat randY = (rand() % 3 - 1) / 10.0f;
+	GLfloat randZ = (rand() % 3 - 1) / 10.0f;
+
+	GLfloat tempX = xPosition + randX;
+	GLfloat tempY = yPosition + randY;
+	GLfloat tempZ = zPosition + randZ;
+
+	cout << "(" << tempX << ", " << tempY << ", " << tempZ << ")\n";
+
+	if (tempX >= -50 && tempX <= 50 &&
+		tempY >= -5 && tempY <= 5 &&
+		tempZ >= -50 && tempZ <= 50)
+		{
+			xPosition = tempX;
+			yPosition = tempY;
+			zPosition = tempZ;
+
+			drawDot(xPosition, yPosition, zPosition);
+		}
+
+
+	
 }
 
-void Walker::drawSphere()
+void Walker::drawTinySphere(float x, float y, float z)
 {
-	GLUquadricObj*	sphereQuadric;
-	sphereQuadric = gluNewQuadric();
-	gluQuadricDrawStyle(sphereQuadric, GLU_FILL);
 
 	GLfloat mat_ambient[] = { 0.3f, 0.0f, 0.0f, 1 };
 	GLfloat mat_diffuse[] = { 1.0f, 0.0f, 0.0f, 1 };
@@ -45,10 +61,15 @@ void Walker::drawSphere()
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse);
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess);
 
-	glPushMatrix(); // red sphere
-	glTranslatef(xPosition, 4.0f, yPosition);
-	gluSphere(sphereQuadric, 1, 25, 25);
+	GLUquadricObj*	sphereQuadric;
+	sphereQuadric = gluNewQuadric();
+	gluQuadricDrawStyle(sphereQuadric, GLU_FILL);
+
+	glPushMatrix(); // red dot
+	glTranslatef(x, y, z);
+	gluSphere(sphereQuadric, .1, 5, 5);
 	glPopMatrix();
+
 }
 
 // draw Walker and create dot array
@@ -58,34 +79,13 @@ void Walker::draw() {
 	vector<Point>::const_iterator it;
 
 	for (it = points.begin(); it != points.end(); ++it) {
-		glBegin(GL_POINTS);
-			glVertex3f((*it).x, (*it).y, (*it).z);
-		glEnd();
+		drawTinySphere((*it).x, (*it).y, (*it).z);
 	}
 
-	// set pen color to red
-	glColor3f(1.0f, 0.0f, 0.0f);
-
-	// draw Ball
-	drawSphere();
-
-	// set color back to white
-	glColor3f(1.0f, 1.0f, 1.0f);
 
 }
 
 // add dot coordinate to dot array
 void Walker::drawDot(float xPosition, float yPosition, float zPosition) {
 	points.push_back(Point(xPosition, yPosition, zPosition));
-}
-
-// update penPosition
-void Walker::toggleDrawing(string drawing) {
-
-	if (drawing == "up") {
-		this->drawing = 0;
-	}
-	else if (drawing == "down") {
-		this->drawing = 1;
-	}
 }

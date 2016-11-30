@@ -18,7 +18,7 @@ GLfloat light_position[] = { lightSourceX,	lightSourceY,	lightSourceZ,	.5f }; //
 
 
 //Create Walker
-Walker walker(0, 0, 0);
+Walker walker(0, 0, 0, 1, 1, 1);
 
 // init callback
 void myInit(void)
@@ -54,7 +54,7 @@ void myInit(void)
 
 	glClearColor(0.0, 0.0, 0.0, 1.0);	// background color: black
 	glColor3f(1.0f, 1.0f, 1.0f);		// drawing color: white
-	glLineWidth(2.0);					// a line is 2 pixels wide
+
 
 	glMatrixMode(GL_PROJECTION);							// set matrix mode
 	glLoadIdentity();										// lead identity matrix
@@ -95,6 +95,12 @@ void drawStage(int w, int h)
 	glPopMatrix();
 }
 
+void myTimer(int iUnused)
+{
+	// update animations and redraw
+	walker.updatePosition();
+	glutPostRedisplay();
+}
 
 // display callback
 void display(void)
@@ -112,6 +118,9 @@ void display(void)
 	walker.draw();
 
 	glutSwapBuffers();
+
+	// call timer to update animations and screen again
+	glutTimerFunc(100, myTimer, 0);
 }
 
 void reshape(int w, int h) {

@@ -17,11 +17,11 @@ class Walker {
 private:
 
 	// variables that define walker's appearance
-	const int walkerSize = 30;
-	const int halfWalkerSize = 15;
+	const int walkerSize = 2;
+	const int halfWalkerSize = 1;
 
 	// changeable variables
-	void drawSphere();
+	void drawTinySphere(float, float, float);
 
 	// used for storing dot coordinates
 	struct Point {
@@ -29,21 +29,20 @@ private:
 		Point(float px, float py, float pz) : x(px), y(py), z(pz) {}
 	};
 
-
 public:
 	// array of dot coordinates
 	vector<Point> points;
 
 	float xPosition, yPosition,
 		  zPosition;				// pen coordinates
-	bool drawing;					// turns drawing on and off
 
-	void toggleDrawing(string);		// update pen position
+	float red, green, blue;			// color values
+
 	void updatePosition();			// update walker's corner coordinates
 	void draw();					// draw ball and dot array
 	void drawDot(float, float, float);		// add dot coordinate to dot array
 
-	Walker(int, int, int);			// Walker constructor
+	Walker(int, int, int, float, float, float);			// Walker constructor
 	~Walker();						// Walker destructor
 
 
