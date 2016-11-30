@@ -28,6 +28,9 @@ Walker purpleWalker(0, 0, 0, 1, 0, 1);
 GLuint toggleWalkers;
 GLuint clearWalkers;
 
+// Toggle spinning
+GLuint spinToggle = 0;
+
 // Toggle Walkers
 GLuint redWalkerOn = 0;
 GLuint greenWalkerOn = 0;
@@ -148,7 +151,8 @@ void display(void)
 	glutTimerFunc(100, myTimer, 0);
 }
 
-void reshape(int w, int h) {
+void reshape(int w, int h)
+{
 	glViewport(0, 0, w, h);
 	WIN_WIDTH = w;
 	WIN_HEIGHT = h;
@@ -161,17 +165,20 @@ void reshape(int w, int h) {
 		70.0);
 }
 
-void mouseMovement(int x, int y) {
+void mouse( int x, int y)
+{
+
 	// 3 * 360 degree possible
-		double deg1 = (360.0 / WIN_WIDTH)*(double)x*3.0;
+	double deg1 = (360.0 / WIN_WIDTH)*(double)x*3.0;
 	// top and bottom views
-		double deg2 = (180.0 / WIN_HEIGHT)*(double)y;
+	double deg2 = (180.0 / WIN_HEIGHT)*(double)y;
 	double r = 30.0;
 	if (deg1 > 360)deg1 = fmod(deg1, 360.0);
 	eyeZ = r * sin(deg2*0.0174532) * cos(deg1*0.0174532);
 	eyeX = r * sin(deg2*0.0174532) * sin(deg1*0.0174532);
 	eyeY = r * cos(deg2*0.0174532);
 	glutPostRedisplay();
+
 }
 
 void toggleWalkersMenu(int id)
@@ -303,7 +310,7 @@ int main(int argc, char** argv)
 	myInit();									// additional inits
 	glutDisplayFunc(display);					// redraw to window
 	glutReshapeFunc(reshape);					// reshape window
-	glutPassiveMotionFunc(mouseMovement);		// govern mouse movement
+	glutMotionFunc(mouse);						// govern active mouse actions
 
 	// create menu system
 	toggleWalkers = glutCreateMenu(toggleWalkersMenu);
