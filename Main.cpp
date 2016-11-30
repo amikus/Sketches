@@ -32,8 +32,8 @@ void myInit(void)
 	WIN_HEIGHT = glutGet(GLUT_SCREEN_HEIGHT) / 2.0;
 
 	//set up light
-	GLfloat light_ambient[] = { 0.8f, 0.8f, 0.8f, 1 };
-	GLfloat light_diffuse[] = { 0.8f, 0.8f, 0.8f, 1 };
+	GLfloat light_ambient[] = { 0.9f, 0.9f, 0.9f, 1 };
+	GLfloat light_diffuse[] = { 0.9f, 0.9f, 0.9f, 1 };
 	GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1 };
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
@@ -81,9 +81,9 @@ void drawStage(int w, int h)
 	glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess);
 
 	glPushMatrix(); // floor
-		glTranslatef(0.0f, -5.0f, 0.0f);
+		glTranslatef(0.0f, -6.0f, 0.0f);
 		glRotatef(-90.0, 1.0, 0.0, 0.0); // Rotate from vertical
-		glScalef(50.0, 50.0, 50.0);
+		glScalef(40.0, 40.0, 40.0);
 		glEnable(GL_POLYGON_OFFSET_FILL);
 		for (j = 0; j < h; ++j) {
 			glBegin(GL_TRIANGLE_STRIP);
