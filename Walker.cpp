@@ -46,7 +46,7 @@ void Walker::drawSphere()
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess);
 
 	glPushMatrix(); // red sphere
-	glTranslatef(0.0f, 4.0f, 0.0f);
+	glTranslatef(xPosition, 4.0f, yPosition);
 	gluSphere(sphereQuadric, 1, 25, 25);
 	glPopMatrix();
 }
