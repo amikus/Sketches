@@ -16,6 +16,8 @@ GLfloat eyeX = 0.0f, eyeY = 0.0f, eyeZ = 0.0f;	// starting eye position
 GLfloat lightSourceX = -3.0f, lightSourceY = 10.0f, lightSourceZ = 5.0f; // location of light source
 GLfloat light_position[] = { lightSourceX,	lightSourceY,	lightSourceZ,	.5f }; // light 0 position
 
+GLuint totalNumberOfWalkers = 0;
+
 //Create Walkers
 Walker redWalker(0, 0, 0, 1, 0, 0);
 Walker greenWalker(0, 0, 0, 0, 1, 0);
@@ -23,6 +25,10 @@ Walker blueWalker(0, 0, 0, 0, 0, 1);
 Walker yellowWalker(0, 0, 0, 1, 1, 0);
 Walker tealWalker(0, 0, 0, 0, 1, 1);
 Walker purpleWalker(0, 0, 0, 1, 0, 1);
+
+// Submenus
+GLuint numberOfWalkers;
+GLuint clearWalkers;
 
 // init callback
 void myInit(void)
@@ -162,6 +168,21 @@ void mouseMovement(int x, int y) {
 	glutPostRedisplay();
 }
 
+void numWalkersMenu(int id)
+{
+
+}
+
+void clearWalkersMenu(int id)
+{
+
+}
+
+void mainMenu(int id)
+{
+	
+}
+
 int main(int argc, char** argv)
 {
 	// basic glut setup
@@ -176,6 +197,22 @@ int main(int argc, char** argv)
 	glutDisplayFunc(display);					// redraw to window
 	glutReshapeFunc(reshape);					// reshape window
 	glutPassiveMotionFunc(mouseMovement);		// govern mouse movement
+
+	// create menu system
+	numberOfWalkers = glutCreateMenu(numWalkersMenu);
+		glutAddMenuEntry("1", 1);
+		glutAddMenuEntry("2", 2);
+		glutAddMenuEntry("3", 3);
+		glutAddMenuEntry("4", 4);
+		glutAddMenuEntry("5", 5);
+		glutAddMenuEntry("6", 6);
+	clearWalkers = glutCreateMenu(clearWalkersMenu);		
+		glutAddMenuEntry("Clear walkers only", 1);
+		glutAddMenuEntry("Clear walkers and coordinates", 2);
+		glutCreateMenu(mainMenu);
+		glutAddSubMenu("Clear walkers", clearWalkers);
+		glutAddSubMenu("Number of walkers", numberOfWalkers);
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 	glutMainLoop();
 
