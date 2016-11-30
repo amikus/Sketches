@@ -123,7 +123,7 @@ void display(void)
 	glNormal3f(0, 0, 1);
 
 	drawStage(100, 100);
-	
+
 	redWalker.draw();
 	greenWalker.draw();
 	blueWalker.draw();

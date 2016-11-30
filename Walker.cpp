@@ -31,9 +31,9 @@ void Walker::updatePosition() {
 	GLfloat tempY = yPosition + randY;
 	GLfloat tempZ = zPosition + randZ;
 
-	if (tempX >= -50 && tempX <= 50 &&
-		tempY >= -5 && tempY <= 5 &&
-		tempZ >= -50 && tempZ <= 50)
+	if (tempX >= -25 && tempX <= 25 &&
+		tempY >= -4.9f && tempY <= 5 &&
+		tempZ >= -25 && tempZ <= 250)
 		{
 			xPosition = tempX;
 			yPosition = tempY;
@@ -42,8 +42,6 @@ void Walker::updatePosition() {
 			drawDot(xPosition, yPosition, zPosition);
 		}
 
-
-	
 }
 
 void Walker::drawTinySphere(float x, float y, float z)
