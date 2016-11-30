@@ -57,7 +57,6 @@ void myInit(void)
 	glClearColor(0.0, 0.0, 0.0, 1.0);	// background color: black
 	glColor3f(1.0f, 1.0f, 1.0f);		// drawing color: white
 
-
 	glMatrixMode(GL_PROJECTION);							// set matrix mode
 	glLoadIdentity();										// lead identity matrix
 
