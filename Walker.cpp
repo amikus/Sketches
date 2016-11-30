@@ -31,8 +31,6 @@ void Walker::updatePosition() {
 	GLfloat tempY = yPosition + randY;
 	GLfloat tempZ = zPosition + randZ;
 
-	cout << "(" << tempX << ", " << tempY << ", " << tempZ << ")\n";
-
 	if (tempX >= -50 && tempX <= 50 &&
 		tempY >= -5 && tempY <= 5 &&
 		tempZ >= -50 && tempZ <= 50)

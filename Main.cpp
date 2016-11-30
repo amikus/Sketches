@@ -16,11 +16,13 @@ GLfloat eyeX = 0.0f, eyeY = 0.0f, eyeZ = 0.0f;	// starting eye position
 GLfloat lightSourceX = -3.0f, lightSourceY = 10.0f, lightSourceZ = 5.0f; // location of light source
 GLfloat light_position[] = { lightSourceX,	lightSourceY,	lightSourceZ,	.5f }; // light 0 position
 
-
 //Create Walkers
 Walker redWalker(0, 0, 0, 1, 0, 0);
 Walker greenWalker(0, 0, 0, 0, 1, 0);
 Walker blueWalker(0, 0, 0, 0, 0, 1);
+Walker yellowWalker(0, 0, 0, 1, 1, 0);
+Walker tealWalker(0, 0, 0, 0, 1, 1);
+Walker purpleWalker(0, 0, 0, 1, 0, 1);
 
 // init callback
 void myInit(void)
@@ -30,8 +32,8 @@ void myInit(void)
 	WIN_HEIGHT = glutGet(GLUT_SCREEN_HEIGHT) / 2.0;
 
 	//set up light
-	GLfloat light_ambient[] = { 0.6f, 0.6f, 0.6f, 1 };
-	GLfloat light_diffuse[] = { 0.6f, 0.6f, 0.6f, 1 };
+	GLfloat light_ambient[] = { 0.8f, 0.8f, 0.8f, 1 };
+	GLfloat light_diffuse[] = { 0.8f, 0.8f, 0.8f, 1 };
 	GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1 };
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
@@ -46,8 +48,6 @@ void myInit(void)
 	glEnable(GL_LIGHTING);
 	glShadeModel(GL_SMOOTH);	// interpolate adjacent polygons shading
 	glEnable(GL_NORMALIZE);		// set normal vectors to unit length
-
-
 
 	// set up ability to track object depths
 	glEnable(GL_DEPTH_TEST);
@@ -103,6 +103,9 @@ void myTimer(int iUnused)
 	redWalker.updatePosition();
 	greenWalker.updatePosition();
 	blueWalker.updatePosition();
+	yellowWalker.updatePosition();
+	tealWalker.updatePosition();
+	purpleWalker.updatePosition();
 
 	glutPostRedisplay();
 }
@@ -124,6 +127,9 @@ void display(void)
 	redWalker.draw();
 	greenWalker.draw();
 	blueWalker.draw();
+	yellowWalker.draw();
+	tealWalker.draw();
+	purpleWalker.draw();
 
 	glutSwapBuffers();
 
