@@ -7,6 +7,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
+#include "Walker.h"
 
 using namespace std;
 
@@ -16,6 +17,9 @@ GLfloat lightSourceX = -3.0f, lightSourceY = 10.0f, lightSourceZ = 5.0f; // loca
 GLfloat light_position[] = { lightSourceX,	lightSourceY,	lightSourceZ,	.5f }; // light 0 position
 
 GLUquadricObj*	sphereQuadric;
+
+//Create Walker
+Walker walker(0, 0, 0);
 
 // init callback
 void myInit(void)
@@ -168,10 +172,10 @@ int main(int argc, char** argv)
 	glutCreateWindow("Sketches");								// open screen window
 	
 	// register callback functions
-	myInit();						// additional inits
-	glutDisplayFunc(display);		// redraw to window
-	glutReshapeFunc(reshape);		// reshape window
-	glutPassiveMotionFunc(mouseMovement);
+	myInit();									// additional inits
+	glutDisplayFunc(display);					// redraw to window
+	glutReshapeFunc(reshape);					// reshape window
+	glutPassiveMotionFunc(mouseMovement);		// govern mouse movement
 
 	glutMainLoop();
 
