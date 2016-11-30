@@ -21,7 +21,7 @@ private:
 	const int halfWalkerSize = 15;
 
 	// changeable variables
-
+	void drawSphere();
 
 	// used for storing dot coordinates
 	struct Point {

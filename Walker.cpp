@@ -13,7 +13,7 @@ Walker::Walker(int xPosition, int yPosition, int zPosition) {
 	updatePosition();
 
 	// draw the ball
-	drawBall();
+	draw();
 };
 
 
@@ -27,6 +27,28 @@ void Walker::updatePosition() {
 
 	// bottom left corner
 	// draw the ball here
+}
+
+void Walker::drawSphere()
+{
+	GLUquadricObj*	sphereQuadric;
+	sphereQuadric = gluNewQuadric();
+	gluQuadricDrawStyle(sphereQuadric, GLU_FILL);
+
+	GLfloat mat_ambient[] = { 0.3f, 0.0f, 0.0f, 1 };
+	GLfloat mat_diffuse[] = { 1.0f, 0.0f, 0.0f, 1 };
+	GLfloat mat_specular[] = { 1.0f, 0.0f, 0.0f, 1 };
+	GLfloat mat_shininess = { 100.0f };
+
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse);
+	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess);
+
+	glPushMatrix(); // red sphere
+	glTranslatef(0.0f, 4.0f, 0.0f);
+	gluSphere(sphereQuadric, 1, 25, 25);
+	glPopMatrix();
 }
 
 // draw Walker and create dot array
@@ -45,6 +67,7 @@ void Walker::draw() {
 	glColor3f(1.0f, 0.0f, 0.0f);
 
 	// draw Ball
+	drawSphere();
 
 	// set color back to white
 	glColor3f(1.0f, 1.0f, 1.0f);

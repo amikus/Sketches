@@ -16,7 +16,6 @@ GLfloat eyeX = 0.0f, eyeY = 0.0f, eyeZ = 0.0f;	// starting eye position
 GLfloat lightSourceX = -3.0f, lightSourceY = 10.0f, lightSourceZ = 5.0f; // location of light source
 GLfloat light_position[] = { lightSourceX,	lightSourceY,	lightSourceZ,	.5f }; // light 0 position
 
-GLUquadricObj*	sphereQuadric;
 
 //Create Walker
 Walker walker(0, 0, 0);
@@ -46,9 +45,7 @@ void myInit(void)
 	glShadeModel(GL_SMOOTH);	// interpolate adjacent polygons shading
 	glEnable(GL_NORMALIZE);		// set normal vectors to unit length
 
-	sphereQuadric = gluNewQuadric();
-	gluQuadricDrawStyle(sphereQuadric, GLU_FILL);
-	glPolygonOffset(1.0, 1.0);	// offset to distinguish shadow from floor
+
 
 	// set up ability to track object depths
 	glEnable(GL_DEPTH_TEST);
@@ -98,25 +95,6 @@ void drawStage(int w, int h)
 	glPopMatrix();
 }
 
-void drawSphere()
-{
-
-	GLfloat mat_ambient[] = { 0.3f, 0.0f, 0.0f, 1 };
-	GLfloat mat_diffuse[] = { 1.0f, 0.0f, 0.0f, 1 };
-	GLfloat mat_specular[] = { 1.0f, 0.0f, 0.0f, 1 };
-	GLfloat mat_shininess = { 100.0f };
-
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse);
-	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess);
-
-	glPushMatrix(); // red sphere
-		glTranslatef(0.0f, 4.0f, 0.0f);
-		gluSphere(sphereQuadric, 1, 25, 25);
-	glPopMatrix();
-}
-
 
 // display callback
 void display(void)
@@ -131,7 +109,7 @@ void display(void)
 	glNormal3f(0, 0, 1);
 
 	drawStage(100, 100);
-	drawSphere();
+	walker.draw();
 
 	glutSwapBuffers();
 }
