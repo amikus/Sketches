@@ -28,7 +28,6 @@ void myInit(void)
 	GLfloat light_ambient[] = { 0.6f, 0.6f, 0.6f, 1 };
 	GLfloat light_diffuse[] = { 0.6f, 0.6f, 0.6f, 1 };
 	GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1 };
-	//GLfloat light_position[] = { lightSourceX, lightSourceY, lightSourceZ, .5f };
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
@@ -115,33 +114,6 @@ void drawSphere()
 }
 
 
-void drawShadow()
-{
-
-	GLfloat shadow[16] = { 1,0,0,0,	0,1,0,-1.0 / lightSourceY,	0,0,1,0,	0,0,0,0 };
-
-	GLfloat mat_ambient[] = { 0.5f, 0.5f, 0.5f, 1 };
-	GLfloat mat_diffuse[] = { 0.0f, 0.0f, 0.0f, 1 };
-	GLfloat mat_specular[] = { 0.0f, 0.0f, 0.0f, 1 };
-	GLfloat mat_shininess = { 75.0f };
-
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse);
-	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess);
-
-	glPushMatrix();
-	glTranslatef(0.0f, -5.0f, 0.0f);
-		glPushMatrix(); // spherical shadow
-			glTranslatef(lightSourceX, lightSourceY, lightSourceZ);
-			glMultMatrixf(shadow); // Apply shadow matrix
-			glTranslatef(-lightSourceX, -lightSourceY, -lightSourceZ);
-			glTranslatef(0, 5.0f, 0.0f);
-			gluSphere(sphereQuadric, 1, 30, 30);
-		glPushMatrix();
-	glPopMatrix();
-}
-
 // display callback
 void display(void)
 {
@@ -156,7 +128,6 @@ void display(void)
 
 	drawStage(100, 100);
 	drawSphere();
-	drawShadow();
 
 	glutSwapBuffers();
 }
