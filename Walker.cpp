@@ -34,9 +34,10 @@ void Walker::drawBall() {
 
 	// draw dot array
 	vector<Point>::const_iterator it;
+
 	for (it = points.begin(); it != points.end(); ++it) {
 		glBegin(GL_POINTS);
-		glVertex2i((*it).x, (*it).y);
+			glVertex3f((*it).x, (*it).y, (*it).z);
 		glEnd();
 	}
 
@@ -51,8 +52,8 @@ void Walker::drawBall() {
 }
 
 // add dot coordinate to dot array
-void Walker::drawDot(float xPosition, float yPosition) {
-	points.push_back(Point(xPosition, yPosition));
+void Walker::drawDot(float xPosition, float yPosition, zPosition) {
+	points.push_back(Point(xPosition, yPosition, zPosition));
 }
 
 // update penPosition

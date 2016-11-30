@@ -25,8 +25,8 @@ private:
 
 	// used for storing dot coordinates
 	struct Point {
-		double x, y;
-		Point(double px, double py) : x(px), y(py) {}
+		float x, y, z;
+		Point(float px, float py, float pz) : x(px), y(py), z(pz) {}
 	};
 
 
@@ -41,7 +41,7 @@ public:
 	void toggleDrawing(string);		// update pen position
 	void updatePosition();			// update walker's corner coordinates
 	void drawBall();				// draw ball and dot array
-	void drawDot(float, float);		// add dot coordinate to dot array
+	void drawDot(float, float, float);		// add dot coordinate to dot array
 
 	Walker(int, int, int);			// Walker constructor
 	~Walker();						// Walker destructor
