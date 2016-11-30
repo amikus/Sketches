@@ -16,8 +16,6 @@ GLfloat eyeX = 0.0f, eyeY = 0.0f, eyeZ = 0.0f;	// starting eye position
 GLfloat lightSourceX = -3.0f, lightSourceY = 10.0f, lightSourceZ = 5.0f; // location of light source
 GLfloat light_position[] = { lightSourceX,	lightSourceY,	lightSourceZ,	.5f }; // light 0 position
 
-GLuint totalNumberOfWalkers = 0;
-
 //Create Walkers
 Walker redWalker(0, 0, 0, 1, 0, 0);
 Walker greenWalker(0, 0, 0, 0, 1, 0);
@@ -27,8 +25,16 @@ Walker tealWalker(0, 0, 0, 0, 1, 1);
 Walker purpleWalker(0, 0, 0, 1, 0, 1);
 
 // Submenus
-GLuint numberOfWalkers;
+GLuint toggleWalkers;
 GLuint clearWalkers;
+
+// Toggle Walkers
+GLuint redWalkerOn = 0;
+GLuint greenWalkerOn = 0;
+GLuint blueWalkerOn = 0;
+GLuint yellowWalkerOn = 0;
+GLuint tealWalkerOn = 0;
+GLuint purpleWalkerOn = 0;
 
 // init callback
 void myInit(void)
@@ -105,12 +111,12 @@ void drawStage(int w, int h)
 void myTimer(int iUnused)
 {
 	// update animations and redraw
-	redWalker.updatePosition();
-	greenWalker.updatePosition();
-	blueWalker.updatePosition();
-	yellowWalker.updatePosition();
-	tealWalker.updatePosition();
-	purpleWalker.updatePosition();
+	if (redWalkerOn) redWalker.updatePosition();
+	if (greenWalkerOn) greenWalker.updatePosition();
+	if (blueWalkerOn) blueWalker.updatePosition();
+	if (yellowWalkerOn) yellowWalker.updatePosition();
+	if (tealWalkerOn) tealWalker.updatePosition();
+	if (purpleWalkerOn) purpleWalker.updatePosition();
 
 	glutPostRedisplay();
 }
@@ -168,19 +174,120 @@ void mouseMovement(int x, int y) {
 	glutPostRedisplay();
 }
 
-void numWalkersMenu(int id)
+void toggleWalkersMenu(int id)
 {
+	switch (id)
+	{
+	case 1:
+		redWalkerOn ? redWalkerOn = 0 : redWalkerOn = 1;
+		break;
+	case 2:
+		greenWalkerOn ? greenWalkerOn = 0 : greenWalkerOn = 1;
+		break;
+	case 3:
+		blueWalkerOn ? blueWalkerOn = 0 : blueWalkerOn = 1;
+		break;
+	case 4:
+		yellowWalkerOn ? yellowWalkerOn = 0 : yellowWalkerOn = 1;
+		break;
+	case 5:
+		tealWalkerOn ? tealWalkerOn = 0 : tealWalkerOn = 1;
+		break;
+	case 6:
+		purpleWalkerOn ? purpleWalkerOn = 0 : purpleWalkerOn = 1;
+		break;
+	case 7:
+		redWalkerOn = 0;
+		greenWalkerOn = 0;
+		blueWalkerOn = 0;
+		yellowWalkerOn = 0;
+		tealWalkerOn = 0;
+		purpleWalkerOn = 0;
+		break;
+	case 8:
+		redWalkerOn = 1;
+		greenWalkerOn = 1;
+		blueWalkerOn = 1;
+		yellowWalkerOn = 1;
+		tealWalkerOn = 1;
+		purpleWalkerOn = 1;
+		break;
+
+	}
 
 }
 
 void clearWalkersMenu(int id)
 {
+	switch (id)
+	{
+	case 1:
+		redWalker.points = {};
+		redWalker.xPosition = 0;
+		redWalker.yPosition = 0;
+		redWalker.zPosition = 0;
+		break;
+	case 2:
+		greenWalker.points = {};
+		greenWalker.xPosition = 0;
+		greenWalker.yPosition = 0;
+		greenWalker.zPosition = 0;
+		break;
+	case 3:
+		blueWalker.points = {};
+		blueWalker.xPosition = 0;
+		blueWalker.yPosition = 0;
+		blueWalker.zPosition = 0;
+		break;
+	case 4:
+		yellowWalker.points = {};
+		yellowWalker.xPosition = 0;
+		yellowWalker.yPosition = 0;
+		yellowWalker.zPosition = 0;
+		break;
+	case 5:
+		tealWalker.points = {};
+		tealWalker.xPosition = 0;
+		tealWalker.yPosition = 0;
+		tealWalker.zPosition = 0;
+		break;
+	case 6:
+		purpleWalker.points = {};
+		purpleWalker.xPosition = 0;
+		purpleWalker.yPosition = 0;
+		purpleWalker.zPosition = 0;
+		break;
+	case 7:
+		redWalker.points = {};
+		greenWalker.points = {};
+		blueWalker.points = {};
+		yellowWalker.points = {};
+		tealWalker.points = {};
+		purpleWalker.points = {};
 
+		redWalker.xPosition = 0;
+		redWalker.yPosition = 0;
+		redWalker.zPosition = 0;
+		greenWalker.xPosition = 0;
+		greenWalker.yPosition = 0;
+		greenWalker.zPosition = 0;
+		blueWalker.xPosition = 0;
+		blueWalker.yPosition = 0;
+		blueWalker.zPosition = 0;
+		yellowWalker.xPosition = 0;
+		yellowWalker.yPosition = 0;
+		yellowWalker.zPosition = 0;
+		tealWalker.xPosition = 0;
+		tealWalker.yPosition = 0;
+		tealWalker.zPosition = 0;
+		purpleWalker.xPosition = 0;
+		purpleWalker.yPosition = 0;
+		purpleWalker.zPosition = 0;
+	}
 }
-
 void mainMenu(int id)
 {
-	
+
 }
 
 int main(int argc, char** argv)
@@ -199,19 +306,26 @@ int main(int argc, char** argv)
 	glutPassiveMotionFunc(mouseMovement);		// govern mouse movement
 
 	// create menu system
-	numberOfWalkers = glutCreateMenu(numWalkersMenu);
-		glutAddMenuEntry("1", 1);
-		glutAddMenuEntry("2", 2);
-		glutAddMenuEntry("3", 3);
-		glutAddMenuEntry("4", 4);
-		glutAddMenuEntry("5", 5);
-		glutAddMenuEntry("6", 6);
-	clearWalkers = glutCreateMenu(clearWalkersMenu);		
-		glutAddMenuEntry("Clear walkers only", 1);
-		glutAddMenuEntry("Clear walkers and coordinates", 2);
-		glutCreateMenu(mainMenu);
+	toggleWalkers = glutCreateMenu(toggleWalkersMenu);
+		glutAddMenuEntry("red", 1);
+		glutAddMenuEntry("green", 2);
+		glutAddMenuEntry("blue", 3);
+		glutAddMenuEntry("yellow", 4);
+		glutAddMenuEntry("teal", 5);
+		glutAddMenuEntry("purple", 6);
+		glutAddMenuEntry("all off", 7);
+		glutAddMenuEntry("all on", 8);
+	clearWalkers = glutCreateMenu(clearWalkersMenu);
+		glutAddMenuEntry("red", 1);
+		glutAddMenuEntry("green", 2);
+		glutAddMenuEntry("blue", 3);
+		glutAddMenuEntry("yellow", 4);
+		glutAddMenuEntry("teal", 5);
+		glutAddMenuEntry("purple", 6);
+		glutAddMenuEntry("all", 7);
+	glutCreateMenu(mainMenu);
+		glutAddSubMenu("Toggle walker activity", toggleWalkers);
 		glutAddSubMenu("Clear walkers", clearWalkers);
-		glutAddSubMenu("Number of walkers", numberOfWalkers);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 	glutMainLoop();
