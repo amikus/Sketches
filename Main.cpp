@@ -18,7 +18,7 @@ GLfloat light_position[] = { lightSourceX,	lightSourceY,	lightSourceZ,	.5f }; //
 
 
 //Create Walker
-Walker walker(0, 0, 0, 1, 1, 1);
+Walker greenWalker(0, 0, 0, 0, 1, 0);
 
 // init callback
 void myInit(void)
@@ -98,7 +98,7 @@ void drawStage(int w, int h)
 void myTimer(int iUnused)
 {
 	// update animations and redraw
-	walker.updatePosition();
+	greenWalker.updatePosition();
 	glutPostRedisplay();
 }
 
@@ -115,7 +115,7 @@ void display(void)
 	glNormal3f(0, 0, 1);
 
 	drawStage(100, 100);
-	walker.draw();
+	greenWalker.draw();
 
 	glutSwapBuffers();
 

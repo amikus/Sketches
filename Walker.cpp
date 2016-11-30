@@ -51,9 +51,9 @@ void Walker::updatePosition() {
 void Walker::drawTinySphere(float x, float y, float z)
 {
 
-	GLfloat mat_ambient[] = { 0.3f, 0.0f, 0.0f, 1 };
-	GLfloat mat_diffuse[] = { 1.0f, 0.0f, 0.0f, 1 };
-	GLfloat mat_specular[] = { 1.0f, 0.0f, 0.0f, 1 };
+	GLfloat mat_ambient[] = { red * 0.3f, green * 0.3f, blue * 0.3f, 1 };
+	GLfloat mat_diffuse[] = { red * 1.0f, green * 1.0f, blue * 1.0f, 1 };
+	GLfloat mat_specular[] = { red * 1.0f, green * 1.0f, blue * 1.0f, 1 };
 	GLfloat mat_shininess = { 100.0f };
 
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
